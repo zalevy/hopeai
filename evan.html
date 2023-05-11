@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <title>Dear Evan Hansen Final</title>
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+
+    label {
+
+        display: block;
+
+        width: 240px;
+
+    }
+
+  </style>
+
+ 
+
+ 
+
+ 
+
+</head>
+
+<body class="no-scroll" >
+
+  <div class="page-container no-scroll"role="main">
+
+  <section id="maincontent" class="page-container scrollable" role="main">
+
+    <div class="field">
+
+    <label class="required" for="Letter">How are you feeling?</label>
+
+    <textarea type="text" style="width:80%" placeholder="Feel free to express your thoughts, emotions, and experiences. The AI is here to listen and provide support."
+    " id="Letter" name="Letter"></textarea><br>
+  </div>
+
+    <div id="ResultDiv" name="ResultDiv">
+
+    <div id="AIResults">
+
+      <h3>HOPE AI Response</h3>
+
+      <p>AI-generated response to your writing. Our AI will be able to give a personalized response with resources that may be helpful for your situation. Please be patient as results may take several moments to fully load.<p>
+
+    </div>
+
+    <div style="text-align: right; padding:15px;">
+
+      <button class="btn-primary" name="go" id="go" type="submit">Submit</button>
+
+    </div>    
+
+    </div>
+
+  </div>
+
+  </section>  
+
+  <script>
+
+    // Add event listener to form submission
+
+      document.getElementById('go').addEventListener('click', function(event) {
+
+      event.preventDefault(); // Prevent form from being submitted
+
+      var ResponseType = ""
+
+     //set results to scrolling gif CAN CHANGE
+
+     //document.getElementById('AIResults').innerHTML = "<img style=';height:96;width:82;' height=96px width=82px src='https://giphy.com/embed/l0He4fJxPCbfqv7Xi'>" ;
+     document.getElementById('AIResults').innerHTML =`<p>Please be patient. It takes me about 30 seconds to think.</p> <iframe src="https://giphy.com/embed/l0He4fJxPCbfqv7Xi" width="96" height="82" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>`
+     var Letter = document.getElementById('Letter').value;
+
+ 
+
+      // Make a POST request to the REST API with the input values
+
+      //fetch('/ProductAdvisor', {
+      fetch('https://cors-anywhere.herokuapp.com/http://ec2-18-190-90-15.us-east-2.compute.amazonaws.com/ProductAdvisor', {
+
+        method: 'POST',
+
+        headers: {
+
+          'Accept': 'application/json',
+
+          'Content-Type': 'application/json'
+
+        },
+
+        body: JSON.stringify({
+
+          CustName: "",
+
+          CustType: "",
+
+          Make: Letter,
+
+          Model: "",
+
+          CompetMake: "",
+
+          CompetModel: "",
+
+          ResponseType: "menhealth"
+
+        })
+
+      })
+
+      .then(response => response.json()) // Parse the response as JSON
+
+      .then(data => {
+
+        // Update the result label with the API response
+
+    document.getElementById('AIResults').innerHTML = `<p>${data.Text.replace(/\n/g, "<br />")}</p>`;});});
+
+  </script>
+
+</body>
